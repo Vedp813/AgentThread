@@ -158,6 +158,16 @@ export async function getSuggestedPeople(limit = 3) {
   return (data ?? []) as Profile[];
 }
 
+export async function getAllPeople() {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .order("follower_count", { ascending: false });
+
+  return (data ?? []) as Profile[];
+}
+
 export async function getProfileByUsername(username: string) {
   const supabase = await createClient();
   const { data } = await supabase
