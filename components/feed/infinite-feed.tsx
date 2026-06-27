@@ -57,9 +57,9 @@ export function InfiniteFeed({ initialPosts, endpoint = "/api/posts", highlight 
   }, [hasMore, loadMore]);
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
       {posts.length === 0 ? (
-        <div className="px-6 py-14 text-center text-sm text-zinc-500">
+        <div className="px-6 py-14 text-center text-sm text-zinc-500 dark:text-zinc-400">
           No posts yet. Be the first to post.
         </div>
       ) : (

@@ -45,13 +45,13 @@ export default async function SearchPage({
             <div className="flex gap-2 text-sm">
               <Link
                 href={`/search?q=${encodeURIComponent(term)}&tab=posts`}
-                className={tab === "posts" ? "rounded-full bg-zinc-900 px-4 py-2 text-white" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600"}
+                className={tab === "posts" ? "rounded-full bg-zinc-900 px-4 py-2 text-white dark:bg-zinc-100 dark:text-zinc-900" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"}
               >
                 Posts
               </Link>
               <Link
                 href={`/search?q=${encodeURIComponent(term)}&tab=people`}
-                className={tab === "people" ? "rounded-full bg-zinc-900 px-4 py-2 text-white" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600"}
+                className={tab === "people" ? "rounded-full bg-zinc-900 px-4 py-2 text-white dark:bg-zinc-100 dark:text-zinc-900" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"}
               >
                 People
               </Link>
@@ -61,16 +61,16 @@ export default async function SearchPage({
 
         {!term ? (
           <Card className="p-8 text-center">
-            <p className="text-sm text-zinc-600">Try: &quot;reasoning chain&quot;, &quot;gpt&quot;, &quot;tool calls&quot;, &quot;safety evals&quot;</p>
+            <p className="text-sm text-zinc-600 dark:text-zinc-300">Try: &quot;reasoning chain&quot;, &quot;gpt&quot;, &quot;tool calls&quot;, &quot;safety evals&quot;</p>
           </Card>
         ) : null}
 
         {tab === "posts" && term ? (
-          <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+          <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
             {posts.length ? (
               posts.map((post) => <PostCard key={post.id} post={post} highlight={term} />)
             ) : (
-              <p className="p-8 text-center text-sm text-zinc-500">No post matches for &quot;{term}&quot;.</p>
+              <p className="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">No post matches for &quot;{term}&quot;.</p>
             )}
           </div>
         ) : null}
@@ -88,8 +88,8 @@ export default async function SearchPage({
                         fallback={person.display_name ?? person.username}
                       />
                       <div>
-                        <p className="font-semibold text-zinc-900">{person.display_name || person.username}</p>
-                        <p className="text-xs text-zinc-500">@{person.username}</p>
+                        <p className="font-semibold text-zinc-900 dark:text-zinc-100">{person.display_name || person.username}</p>
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400">@{person.username}</p>
                       </div>
                     </Link>
                     {currentProfile && currentProfile.id !== person.id ? (
@@ -103,7 +103,7 @@ export default async function SearchPage({
                 </Card>
               ))
             ) : (
-              <Card className="col-span-full p-8 text-center text-sm text-zinc-500">No people found for &quot;{term}&quot;.</Card>
+              <Card className="col-span-full p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">No people found for &quot;{term}&quot;.</Card>
             )}
           </div>
         ) : null}

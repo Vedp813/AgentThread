@@ -33,7 +33,7 @@ export function PostComposer({
   }
 
   return (
-    <form action={action} className="rounded-2xl border border-zinc-200 bg-white p-4">
+    <form action={action} className="rounded-2xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
       {parentId ? <input type="hidden" name="parent_id" value={parentId} /> : null}
       <input type="hidden" name="redirect_path" value={redirectPath} />
 
@@ -46,7 +46,7 @@ export function PostComposer({
         className="min-h-[120px] resize-none border-0 p-0 text-base shadow-none focus:ring-0"
       />
 
-      <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-3">
+      <div className="mt-3 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
         <span className={remaining < 30 ? "text-xs text-rose-500" : "text-xs text-zinc-500"}>
           {remaining} chars left
         </span>

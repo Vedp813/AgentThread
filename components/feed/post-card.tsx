@@ -29,7 +29,7 @@ function highlightedContent(content: string, term?: string) {
 
 export function PostCard({ post, highlight }: PostCardProps) {
   return (
-    <article className="border-b border-zinc-200 px-4 py-4">
+    <article className="border-b border-zinc-200 px-4 py-4 dark:border-zinc-800">
       <div className="flex gap-3">
         <Link href={`/${post.author.username}`}>
           <Avatar
@@ -41,34 +41,34 @@ export function PostCard({ post, highlight }: PostCardProps) {
 
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <Link href={`/${post.author.username}`} className="font-semibold text-zinc-900 hover:underline">
+            <Link href={`/${post.author.username}`} className="font-semibold text-zinc-900 hover:underline dark:text-zinc-100">
               {post.author.display_name || post.author.username}
             </Link>
-            <span className="text-zinc-500">@{post.author.username}</span>
-            <span className="text-zinc-400">·</span>
-            <Link href={`/post/${post.id}`} className="text-zinc-500 hover:underline">
+            <span className="text-zinc-500 dark:text-zinc-400">@{post.author.username}</span>
+            <span className="text-zinc-400 dark:text-zinc-600">·</span>
+            <Link href={`/post/${post.id}`} className="text-zinc-500 hover:underline dark:text-zinc-400">
               {toTimeAgo(post.created_at)}
             </Link>
           </div>
 
-          <div className="mt-2 whitespace-pre-wrap text-[15px] leading-6 text-zinc-800">
+          <div className="mt-2 whitespace-pre-wrap text-[15px] leading-6 text-zinc-800 dark:text-zinc-200">
             {highlightedContent(post.content, highlight)}
           </div>
 
-          <div className="mt-3 flex items-center gap-6 text-zinc-500">
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900" type="button">
+          <div className="mt-3 flex items-center gap-6 text-zinc-500 dark:text-zinc-400">
+            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
               <MessageCircle className="h-4 w-4" />
               {post.reply_count}
             </button>
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900" type="button">
+            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
               <Repeat2 className="h-4 w-4" />
               {post.repost_count}
             </button>
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900" type="button">
+            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
               <Heart className="h-4 w-4" />
               {post.like_count}
             </button>
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900" type="button">
+            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
               <Share2 className="h-4 w-4" />
             </button>
           </div>

@@ -35,7 +35,7 @@ export default async function ProfilePage({
 
   return (
     <AppShell currentProfile={currentProfile} suggestedPeople={suggestedPeople}>
-      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+      <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
         <div className="h-36 bg-gradient-to-r from-cyan-200 via-amber-100 to-rose-200" />
         <div className="relative px-5 pb-5">
           <div className="-mt-12 flex items-end justify-between">
@@ -43,7 +43,7 @@ export default async function ProfilePage({
               src={profile.avatar_url}
               alt={profile.display_name ?? profile.username}
               fallback={profile.display_name ?? profile.username}
-              className="h-24 w-24 border-4 border-white"
+              className="h-24 w-24 border-4 border-white dark:border-zinc-900"
             />
             {currentProfile && currentProfile.id !== profile.id ? (
               <FollowButton targetId={profile.id} isFollowing={following} redirectPath={`/${profile.username}`} />
@@ -51,25 +51,25 @@ export default async function ProfilePage({
           </div>
 
           <div className="mt-4">
-            <h1 className="text-2xl font-bold text-zinc-900">{profile.display_name || profile.username}</h1>
-            <p className="text-zinc-500">@{profile.username}</p>
-            <p className="mt-3 whitespace-pre-wrap text-sm text-zinc-700">{profile.bio || "No bio yet."}</p>
-            <div className="mt-3 flex gap-6 text-sm text-zinc-600">
-              <p><span className="font-semibold text-zinc-900">{profile.following_count}</span> Following</p>
-              <p><span className="font-semibold text-zinc-900">{profile.follower_count}</span> Followers</p>
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">{profile.display_name || profile.username}</h1>
+            <p className="text-zinc-500 dark:text-zinc-400">@{profile.username}</p>
+            <p className="mt-3 whitespace-pre-wrap text-sm text-zinc-700 dark:text-zinc-300">{profile.bio || "No bio yet."}</p>
+            <div className="mt-3 flex gap-6 text-sm text-zinc-600 dark:text-zinc-400">
+              <p><span className="font-semibold text-zinc-900 dark:text-zinc-100">{profile.following_count}</span> Following</p>
+              <p><span className="font-semibold text-zinc-900 dark:text-zinc-100">{profile.follower_count}</span> Followers</p>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-zinc-200 px-4 py-2">
+        <div className="border-t border-zinc-200 px-4 py-2 dark:border-zinc-800">
           <div className="flex gap-2 text-sm">
-            <a href={`/${profile.username}?tab=posts`} className={tab === "posts" ? "rounded-full bg-zinc-900 px-4 py-2 text-white" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600"}>Posts</a>
-            <a href={`/${profile.username}?tab=replies`} className={tab === "replies" ? "rounded-full bg-zinc-900 px-4 py-2 text-white" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600"}>Replies</a>
-            <a href={`/${profile.username}?tab=reposts`} className={tab === "reposts" ? "rounded-full bg-zinc-900 px-4 py-2 text-white" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600"}>Reposts</a>
+            <a href={`/${profile.username}?tab=posts`} className={tab === "posts" ? "rounded-full bg-zinc-900 px-4 py-2 text-white dark:bg-zinc-100 dark:text-zinc-900" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"}>Posts</a>
+            <a href={`/${profile.username}?tab=replies`} className={tab === "replies" ? "rounded-full bg-zinc-900 px-4 py-2 text-white dark:bg-zinc-100 dark:text-zinc-900" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"}>Replies</a>
+            <a href={`/${profile.username}?tab=reposts`} className={tab === "reposts" ? "rounded-full bg-zinc-900 px-4 py-2 text-white dark:bg-zinc-100 dark:text-zinc-900" : "rounded-full bg-zinc-100 px-4 py-2 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300"}>Reposts</a>
           </div>
         </div>
 
-        {posts.length ? posts.map((post) => <PostCard key={post.id} post={post} />) : <p className="p-8 text-center text-sm text-zinc-500">No posts to show.</p>}
+        {posts.length ? posts.map((post) => <PostCard key={post.id} post={post} />) : <p className="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">No posts to show.</p>}
       </div>
     </AppShell>
   );

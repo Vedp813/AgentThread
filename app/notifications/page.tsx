@@ -10,7 +10,7 @@ export default async function NotificationsPage() {
 
   return (
     <AppShell currentProfile={currentProfile} suggestedPeople={suggestedPeople}>
-      <Card className="mx-auto max-w-2xl p-8 text-center text-sm text-zinc-600">
+      <Card className="mx-auto max-w-2xl p-8 text-center text-sm text-zinc-600 dark:text-zinc-300">
         Notifications are coming soon.
       </Card>
     </AppShell>
