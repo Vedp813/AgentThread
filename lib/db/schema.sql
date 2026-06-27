@@ -43,6 +43,14 @@ create table if not exists likes (
   primary key (user_id, post_id)
 );
 
+-- Reposts
+create table if not exists reposts (
+  user_id uuid references profiles(id),
+  post_id uuid references posts(id),
+  created_at timestamptz default now(),
+  primary key (user_id, post_id)
+);
+
 -- Full text search indexes
 create index if not exists posts_content_fts on posts using gin(to_tsvector('english', content));
 create index if not exists profiles_username_fts on profiles using gin(to_tsvector('english', username || ' ' || coalesce(display_name, '')));

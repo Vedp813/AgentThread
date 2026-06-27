@@ -3,17 +3,20 @@ import { AppShell } from "@/components/layout/app-shell";
 import { PostCard } from "@/components/feed/post-card";
 import { PostComposer } from "@/components/feed/post-composer";
 import { createPostAction } from "@/lib/actions";
-import { getCurrentProfile, getPostById, getReplies, getSuggestedPeople } from "@/lib/data";
+import { attachReactions, getCurrentProfile, getPostById, getReplies, getSuggestedPeople } from "@/lib/data";
 
 export default async function SinglePostPage({ params }: { params: { id: string } }) {
-  const [currentProfile, post, replies, suggestedPeople] = await Promise.all([
+  const [currentProfile, rawPost, rawReplies, suggestedPeople] = await Promise.all([
     getCurrentProfile(),
     getPostById(params.id),
     getReplies(params.id),
     getSuggestedPeople(3),
   ]);
 
-  if (!post) notFound();
+  if (!rawPost) notFound();
+
+  const [post] = await attachReactions([rawPost], currentProfile?.id);
+  const replies = await attachReactions(rawReplies, currentProfile?.id);
 
   return (
     <AppShell currentProfile={currentProfile} suggestedPeople={suggestedPeople}>

@@ -191,6 +191,24 @@ export async function getPostsByUsername(username: string, type: "posts" | "repl
     return [] as PostWithAuthor[];
   }
 
+  if (type === "reposts") {
+    const { data: rows } = await supabase
+      .from("reposts")
+      .select("post_id")
+      .eq("user_id", profile.id)
+      .order("created_at", { ascending: false })
+      .limit(40);
+
+    const ids = (rows ?? []).map((r) => r.post_id as string);
+    if (!ids.length) return [] as PostWithAuthor[];
+
+    const { data } = await supabase.from("posts").select(postSelect).in("id", ids);
+    const order = new Map(ids.map((id, i) => [id, i]));
+    return normalizePosts(data).sort(
+      (a, b) => (order.get(a.id) ?? 0) - (order.get(b.id) ?? 0)
+    );
+  }
+
   let query = supabase
     .from("posts")
     .select(postSelect)
@@ -286,6 +304,23 @@ export async function isFollowing(followerId: string, followingId: string) {
   return Boolean(data);
 }
 
+export async function attachReactions(posts: PostWithAuthor[], userId?: string) {
+  if (!userId || !posts.length) return posts;
+
+  const supabase = await createClient();
+  const ids = posts.map((p) => p.id);
+
+  const [{ data: likes }, { data: reposts }] = await Promise.all([
+    supabase.from("likes").select("post_id").eq("user_id", userId).in("post_id", ids),
+    supabase.from("reposts").select("post_id").eq("user_id", userId).in("post_id", ids),
+  ]);
+
+  const liked = new Set((likes ?? []).map((r) => r.post_id as string));
+  const reposted = new Set((reposts ?? []).map((r) => r.post_id as string));
+
+  return posts.map((p) => ({ ...p, liked: liked.has(p.id), reposted: reposted.has(p.id) }));
+}
+
 export async function getFollowingIds(followerId: string) {
   const supabase = await createClient();
   const { data } = await supabase
@@ -294,4 +329,28 @@ export async function getFollowingIds(followerId: string) {
     .eq("follower_id", followerId);
 
   return new Set((data ?? []).map((item) => item.following_id as string));
+}
+
+async function profilesByIds(ids: string[]) {
+  if (!ids.length) return [] as Profile[];
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .in("id", ids)
+    .order("follower_count", { ascending: false });
+
+  return (data ?? []) as Profile[];
+}
+
+export async function getFollowers(userId: string) {
+  const supabase = await createClient();
+  const { data } = await supabase.from("follows").select("follower_id").eq("following_id", userId);
+  return profilesByIds((data ?? []).map((r) => r.follower_id as string));
+}
+
+export async function getFollowing(userId: string) {
+  const supabase = await createClient();
+  const { data } = await supabase.from("follows").select("following_id").eq("follower_id", userId);
+  return profilesByIds((data ?? []).map((r) => r.following_id as string));
 }

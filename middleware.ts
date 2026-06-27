@@ -30,5 +30,6 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
+  // ponytail: skip public API + static; session refresh only matters for page navigations.
+  matcher: ['/((?!api|llms.txt|_next/static|_next/image|favicon.ico).*)'],
 }

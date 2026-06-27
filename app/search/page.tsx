@@ -6,6 +6,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { PostCard } from "@/components/feed/post-card";
 import { FollowButton } from "@/components/profile/follow-button";
 import {
+  attachReactions,
   getCurrentProfile,
   getFollowingIds,
   getSuggestedPeople,
@@ -21,15 +22,16 @@ export default async function SearchPage({
   const term = (searchParams.q ?? "").trim();
   const tab = searchParams.tab === "people" ? "people" : "posts";
 
-  const [currentProfile, suggestedPeople, posts, people] = await Promise.all([
+  const [currentProfile, suggestedPeople, rawPosts, people] = await Promise.all([
     getCurrentProfile(),
     getSuggestedPeople(3),
     tab === "posts" && term ? searchPosts(term) : Promise.resolve([]),
     tab === "people" && term ? searchPeople(term) : Promise.resolve([]),
   ]);
-  const followingIds = currentProfile
-    ? await getFollowingIds(currentProfile.id)
-    : new Set<string>();
+  const [followingIds, posts] = await Promise.all([
+    currentProfile ? getFollowingIds(currentProfile.id) : Promise.resolve(new Set<string>()),
+    attachReactions(rawPosts, currentProfile?.id),
+  ]);
 
   return (
     <AppShell currentProfile={currentProfile} suggestedPeople={suggestedPeople}>

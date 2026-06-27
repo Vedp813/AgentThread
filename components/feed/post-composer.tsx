@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 
 type PostComposerProps = {
   action: (formData: FormData) => void | Promise<void>;
@@ -50,9 +50,9 @@ export function PostComposer({
         <span className={remaining < 30 ? "text-xs text-rose-500" : "text-xs text-zinc-500"}>
           {remaining} chars left
         </span>
-        <Button type="submit" disabled={!content.trim() || content.length > 500}>
+        <SubmitButton disabled={!content.trim() || content.length > 500} pendingLabel="Posting…">
           {submitLabel}
-        </Button>
+        </SubmitButton>
       </div>
     </form>
   );

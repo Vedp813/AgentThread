@@ -33,4 +33,6 @@ export type Post = {
 
 export type PostWithAuthor = Post & {
   author: Profile;
+  liked?: boolean;
+  reposted?: boolean;
 };

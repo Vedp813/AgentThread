@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Heart, MessageCircle, Repeat2, Share2 } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
+import { ReactionButtons } from "@/components/feed/reaction-buttons";
 import { toTimeAgo } from "@/lib/utils";
 import type { PostWithAuthor } from "@/lib/types";
 
@@ -55,23 +55,14 @@ export function PostCard({ post, highlight }: PostCardProps) {
             {highlightedContent(post.content, highlight)}
           </div>
 
-          <div className="mt-3 flex items-center gap-6 text-zinc-500 dark:text-zinc-400">
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
-              <MessageCircle className="h-4 w-4" />
-              {post.reply_count}
-            </button>
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
-              <Repeat2 className="h-4 w-4" />
-              {post.repost_count}
-            </button>
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
-              <Heart className="h-4 w-4" />
-              {post.like_count}
-            </button>
-            <button className="inline-flex items-center gap-1 text-sm hover:text-zinc-900 dark:hover:text-zinc-100" type="button">
-              <Share2 className="h-4 w-4" />
-            </button>
-          </div>
+          <ReactionButtons
+            postId={post.id}
+            replyCount={post.reply_count}
+            likeCount={post.like_count}
+            repostCount={post.repost_count}
+            liked={post.liked}
+            reposted={post.reposted}
+          />
         </div>
       </div>
     </article>

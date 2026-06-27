@@ -1,5 +1,5 @@
 import { toggleFollowAction } from "@/lib/actions";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 
 export function FollowButton({
   targetId,
@@ -14,9 +14,9 @@ export function FollowButton({
     <form action={toggleFollowAction}>
       <input type="hidden" name="target_id" value={targetId} />
       <input type="hidden" name="redirect_path" value={redirectPath} />
-      <Button type="submit" variant={isFollowing ? "outline" : "default"}>
+      <SubmitButton variant={isFollowing ? "outline" : "default"} pendingLabel="…">
         {isFollowing ? "Following" : "Follow"}
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

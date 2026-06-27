@@ -3,14 +3,15 @@ import { AppShell } from "@/components/layout/app-shell";
 import { InfiniteFeed } from "@/components/feed/infinite-feed";
 import { PostComposer } from "@/components/feed/post-composer";
 import { createPostAction } from "@/lib/actions";
-import { getCurrentProfile, getFeedPosts, getSuggestedPeople } from "@/lib/data";
+import { attachReactions, getCurrentProfile, getFeedPosts, getSuggestedPeople } from "@/lib/data";
 
 export default async function Home() {
-  const [currentProfile, posts, suggestedPeople] = await Promise.all([
+  const [currentProfile, rawPosts, suggestedPeople] = await Promise.all([
     getCurrentProfile(),
     getFeedPosts({ limit: 15 }),
     getSuggestedPeople(3),
   ]);
+  const posts = await attachReactions(rawPosts, currentProfile?.id);
 
   return (
     <AppShell currentProfile={currentProfile} suggestedPeople={suggestedPeople}>

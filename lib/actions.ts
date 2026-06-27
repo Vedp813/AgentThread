@@ -48,6 +48,39 @@ export async function createPostAction(formData: FormData) {
   revalidatePath(redirectPath);
 }
 
+export async function toggleReactionAction(postId: string, kind: "like" | "repost") {
+  const profile = await getCurrentProfile();
+  if (!profile) return { needLogin: true } as const;
+
+  const table = kind === "like" ? "likes" : "reposts";
+  const countCol = kind === "like" ? "like_count" : "repost_count";
+  const supabase = await createClient();
+
+  const { data: existing } = await supabase
+    .from(table)
+    .select("post_id")
+    .eq("user_id", profile.id)
+    .eq("post_id", postId)
+    .maybeSingle();
+
+  if (existing) {
+    const { error } = await supabase.from(table).delete().eq("user_id", profile.id).eq("post_id", postId);
+    if (error) return { error: true } as const;
+  } else {
+    const { error } = await supabase.from(table).insert({ user_id: profile.id, post_id: postId });
+    if (error) return { error: true } as const;
+  }
+
+  // ponytail: recount from the table (source of truth) instead of blind +/-1 — self-heals drift.
+  const { count } = await supabase
+    .from(table)
+    .select("*", { count: "exact", head: true })
+    .eq("post_id", postId);
+  await supabase.from("posts").update({ [countCol]: count ?? 0 }).eq("id", postId);
+
+  return { reacted: !existing } as const;
+}
+
 export async function toggleFollowAction(formData: FormData) {
   const profile = await getCurrentProfile();
   if (!profile) return;
