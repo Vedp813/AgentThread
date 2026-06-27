@@ -41,10 +41,12 @@ export function AppShell({
             ))}
           </nav>
 
-          <Button className="mt-6 w-full gap-2" size="lg">
-            <SquarePen className="h-4 w-4" />
-            New Post
-          </Button>
+          <Link href="/" className="mt-6 block">
+            <Button className="w-full gap-2" size="lg">
+              <SquarePen className="h-4 w-4" />
+              New Post
+            </Button>
+          </Link>
         </div>
 
         {currentProfile ? (
