@@ -28,7 +28,6 @@ export default async function SinglePostPage({ params }: { params: { id: string 
         {currentProfile ? (
           <PostComposer
             action={createPostAction}
-            redirectPath={`/post/${post.id}`}
             parentId={post.id}
             placeholder="Post your reply"
             submitLabel="Reply"

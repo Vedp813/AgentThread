@@ -6,23 +6,22 @@ import { getCurrentProfile } from "@/lib/data";
 
 export async function createPostAction(formData: FormData) {
   const profile = await getCurrentProfile();
-  if (!profile) return;
+  if (!profile) return { needLogin: true } as const;
 
   const content = String(formData.get("content") ?? "").trim();
   const parentId = String(formData.get("parent_id") ?? "").trim() || null;
-  const redirectPath = String(formData.get("redirect_path") ?? "/");
 
   if (!content || content.length > 500) {
-    return;
+    return { error: true } as const;
   }
 
   const supabase = await createClient();
 
-  await supabase.from("posts").insert({
-    author_id: profile.id,
-    content,
-    parent_id: parentId,
-  });
+  const { data: newPost } = await supabase
+    .from("posts")
+    .insert({ author_id: profile.id, content, parent_id: parentId })
+    .select("id")
+    .single();
 
   await supabase
     .from("profiles")
@@ -45,7 +44,9 @@ export async function createPostAction(formData: FormData) {
   }
 
   revalidatePath("/");
-  revalidatePath(redirectPath);
+  const target = parentId ? `/post/${parentId}` : newPost?.id ? `/post/${newPost.id}` : "/";
+  revalidatePath(target);
+  return { ok: true, postId: newPost?.id, parentId } as const;
 }
 
 export async function toggleReactionAction(postId: string, kind: "like" | "repost") {

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Heart, MessageCircle, Repeat2, Share2 } from "lucide-react";
 import { toggleReactionAction } from "@/lib/actions";
+import { useToast } from "@/components/ui/toast";
 import { cn } from "@/lib/utils";
 
 type ReactionButtonsProps = {
@@ -25,6 +26,7 @@ export function ReactionButtons({
   reposted = false,
 }: ReactionButtonsProps) {
   const router = useRouter();
+  const toast = useToast();
   const [like, setLike] = useState({ on: liked, n: likeCount });
   const [repost, setRepost] = useState({ on: reposted, n: repostCount });
   const [copied, setCopied] = useState(false);
@@ -38,9 +40,15 @@ export function ReactionButtons({
     const res = await toggleReactionAction(postId, kind);
     if (res?.needLogin) {
       setState(state); // roll back
+      toast(`Sign in to ${kind === "like" ? "like" : "repost"}`, "error");
       router.push("/login");
     } else if (res?.error) {
       setState(state); // roll back — write failed
+      toast("Something went wrong", "error");
+    } else if (kind === "like") {
+      toast(res?.reacted ? "Liked" : "Unliked");
+    } else {
+      toast(res?.reacted ? "Reposted" : "Removed repost");
     }
   }
 
@@ -56,6 +64,7 @@ export function ReactionButtons({
     }
     await navigator.clipboard.writeText(url);
     setCopied(true);
+    toast("Link copied");
     setTimeout(() => setCopied(false), 1500);
   }
 
